@@ -7,7 +7,7 @@
   "features": {
     "networking": true
   },
-  "landingPage": "/?start-shopping=1",
+  "landingPage": "/",
   "login": false,
   "steps": [
     {
@@ -59,7 +59,7 @@
     {
       "step": "writeFile",
       "path": "/wordpress/wp-content/mu-plugins/sumi-guest-start.php",
-      "data": "<?php\nadd_action('template_redirect',function(){\n if(isset($_GET['start-shopping'])){\n  if(is_user_logged_in()) wp_logout();\n  wp_safe_redirect(home_url('/'));exit;\n }\n});\n"
+      "data": "<?php\n// Keep the Playground operator session separate from storefront testing.\nadd_filter('show_admin_bar','__return_false');\nadd_filter('determine_current_user',function($id){\n if(!$id || is_admin()) return $id;\n $account=get_userdata($id);\n return $account && in_array('administrator',$account->roles,true) ? 0 : $id;\n},PHP_INT_MAX);\n"
     }
   ]
 }
